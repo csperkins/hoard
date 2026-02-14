@@ -16,6 +16,8 @@ setuptools-pipfile = {file = "."}
 
 [packages]
 hoard = {file = ".", editable = true}
+aiodns   = "*"
+aiohttp  = "*"
 pydantic = "*"
 requests = ">=2.32.4"
 
