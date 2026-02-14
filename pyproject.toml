@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name    = "hoard"
+version = "0.0.1"
+authors = [
+  {name = "Colin Perkins", email = "csp@csperkins.org"}
+]
+description = "Hoard"
+readme = "README.md"
+requires-python = '>=3.14'
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+  "mypy",
+  "setuptools",
+  "wheel",
+  "twine",
+  "keyring",
+  "coverage",
+  "types-six",
+  "types-requests",
+  "setuptools-pipfile",
+  "pydantic",
+  "requests"
+]
+
