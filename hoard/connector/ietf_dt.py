@@ -36,7 +36,8 @@ class ConnectorDataTracker:
         self._ua          = "glasgow-ietfdata/0.9.0 (hoard)"  # Update when making a new relaase
         self._base_url    = os.environ.get("IETFDATA_DT_URL", "https://datatracker.ietf.org")
         self._multi_delay = 0.1
-        self._session     = aiohttp.ClientSession()
+        self._connector   = aiohttp.TCPConnector(limit_per_host = 1)
+        self._session     = aiohttp.ClientSession(connector = self._connector)
 
         self._log.info(f"ConnectorDataTracker using {self._base_url}")
 
