@@ -24,10 +24,10 @@
 
 import asyncio
 
-from hoard.connector.ietf_dt import *
+from hoard.connector.ietf_dt import DataTracker
 
 async def main():
-    dt = ConnectorDataTracker()
+    dt = DataTracker()
     async for person in dt.fetch_multi("/api/v1/person/person/"):
         print(person["id"])
     await dt.close()
