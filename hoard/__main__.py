@@ -24,7 +24,7 @@
 
 import asyncio
 
-from hoard.connector.ietf_dt import DataTracker
+from hoard.connector.ietf import DataTracker
 
 async def main():
     dt = DataTracker()
