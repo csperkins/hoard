@@ -50,6 +50,7 @@ class ConnectorDataTracker:
         """
         Fetch the data for a single API endpoint from the datatracker:
         """
+        assert endpoint.startswith("/api/v1/")
         retry_delay = 1.875
         while True:
             r = await self._session.get(self._base_url + endpoint, headers={'User-Agent': self._ua})
