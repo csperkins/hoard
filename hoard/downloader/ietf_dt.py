@@ -22,7 +22,8 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import asyncio
+from typing               import List, Optional, Tuple, Dict, Iterator, Type, TypeVar, Any, Generic
+from typing_extensions    import Self
 
 from hoard.connector.ietf import DataTracker
 
@@ -31,34 +32,11 @@ class DownloaderIETFDataTracker:
         self._dt = DataTracker()
 
 
-
-    async def _download_person(self):
-        first = True
-        async for curr_person in self._dt.fetch_multi("/api/v1/person/person/"):
-            print(curr_person["resource_uri"])
-            #hist_uri = f"/api/v1/person/historicalperson/{curr_person['id']}/"
-            #async for hist_person in await self._dt.fetch(hist_uri):
-            #    print(hist_person["resource_uri"])
-            #    if first:
-            #        curr_person = {
-            #            "ascii"               : person["ascii"],
-            #            "ascii_short"         : person["ascii_short"],
-            #            "biography"           : person["biography"],
-            #            "id"                  : person["id"],
-            #            "name"                : person["name"],
-            #            "name_from_draft"     : person["name_from_draft"],
-            #            "plain"               : person["plain"],
-            #            "pronouns_freetext"   : person["pronouns_freetext"],
-            #            "pronouns_selectable" : person["pronouns_selectable"],
-            #            "resource_uri"        : person["resource_uri"],
-            #            "time"                : person["time"]
-            #        }
-            #        print(hist_person)
-            #    first = False
-
-
-
-    async def update(self):
+    def update(self):
+        """
+        Update with the current contents of the IETF DataTracker
+        """
+        print("*** Downloading from IETF DataTracker")
         endpoints = {
             "/api/v1/community/communitylist/":             None,
             "/api/v1/community/emailsubscription/":         None,
@@ -262,20 +240,58 @@ class DownloaderIETFDataTracker:
         }
 
         actions = []
-        for e1 in await self._dt.fetch("/api/v1/"):
-            for e2 in await self._dt.fetch(f"/api/v1/{e1}/"):
-                endpoint = f"/api/v1/{e1}/{e2}/"
-                if endpoint not in endpoints:
-                    print(f"WARNING: no disposition for DataTracker endpoint: {endpoint}")
-                else:
-                    action = endpoints[endpoint]
-                    if action is not None and action not in actions:
-                        actions.append(endpoints[endpoint])
-
+        for endpoint in self._api_endpoints():
+            if endpoint not in endpoints:
+                print(f"WARNING: no disposition for DataTracker endpoint: {endpoint}")
+            else:
+                action = endpoints[endpoint]
+                if action is not None and action not in actions:
+                    actions.append(action)
         for action in actions:
-            await action()
+            action()
+        self._dt.close()
 
-        await self._dt.close()
+
+    def _api_endpoints(self) -> Iterator[str]:
+        """
+        Iterate over all the API endpoints available in the DataTracker
+        """
+        print("    Finding API endpoints")
+        r1 = self._dt.fetch("/api/v1/")
+        assert r1 is not None
+        for e1 in r1:
+            r2 = self._dt.fetch(f"/api/v1/{e1}/")
+            assert r2 is not None
+            for e2 in r2:
+                yield f"/api/v1/{e1}/{e2}/"
+
+
+    def _download_person(self):
+        print("    Finding people")
+        first = True
+        for curr_person in self._dt.fetch_multi("/api/v1/person/person/"):
+            print(f"        {curr_person['resource_uri']}")
+            #hist_uri = f"/api/v1/person/historicalperson/{curr_person['id']}/"
+            #async for hist_person in await self._dt.fetch(hist_uri):
+            #    print(hist_person["resource_uri"])
+            #    if first:
+            #        curr_person = {
+            #            "ascii"               : person["ascii"],
+            #            "ascii_short"         : person["ascii_short"],
+            #            "biography"           : person["biography"],
+            #            "id"                  : person["id"],
+            #            "name"                : person["name"],
+            #            "name_from_draft"     : person["name_from_draft"],
+            #            "plain"               : person["plain"],
+            #            "pronouns_freetext"   : person["pronouns_freetext"],
+            #            "pronouns_selectable" : person["pronouns_selectable"],
+            #            "resource_uri"        : person["resource_uri"],
+            #            "time"                : person["time"]
+            #        }
+            #        print(hist_person)
+            #    first = False
+
+
 
 
 # vim: set tw=0 ai:

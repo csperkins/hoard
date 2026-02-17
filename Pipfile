@@ -1,25 +1,23 @@
 [[source]]
-name = "pypi"
-url = "https://pypi.org/simple"
+name       = "pypi"
+url        = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-mypy = "*"
-setuptools = ">=70.0.0"
-wheel = "*"
-twine = "*"
-keyring = "*"
-coverage = "*"
-types-six = "*"
-types-requests = "*"
+mypy               = "*"
+setuptools         = ">=70.0.0"
+wheel              = "*"
+twine              = "*"
+keyring            = "*"
+coverage           = "*"
+types-six          = "*"
+types-requests     = "*"
 setuptools-pipfile = {file = "."}
 
 [packages]
-hoard = {file = ".", editable = true}
-aiodns   = "*"
-aiohttp  = "*"
-pydantic = "*"
-requests = ">=2.32.4"
+hoard              = {file = ".", editable = true}
+pydantic           = "*"
+requests           = ">=2.32.4"
 
 [requires]
 python_version = "3.14"

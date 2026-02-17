@@ -22,15 +22,13 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import asyncio
-
 from hoard.downloader.ietf_dt import DownloaderIETFDataTracker
 
-async def main():
+def main():
     dt = DownloaderIETFDataTracker()
-    await dt.update()
+    dt.update()
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
 
 # vim: set tw=0 ai:
