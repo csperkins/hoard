@@ -24,13 +24,11 @@
 
 import asyncio
 
-from hoard.connector.ietf import DataTracker
+from hoard.downloader.ietf_dt import DownloaderIETFDataTracker
 
 async def main():
-    dt = DataTracker()
-    async for person in dt.fetch_multi("/api/v1/person/person/"):
-        print(person["id"])
-    await dt.close()
+    dt = DownloaderIETFDataTracker()
+    await dt.update()
 
 if __name__ == "__main__":
     asyncio.run(main())
